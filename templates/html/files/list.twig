@@ -1,0 +1,53 @@
+{#
+ * @copyright 2026 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @param array  files
+ * @param array  params    Query parameters
+ * @param string sort      Current sorting
+ * @param int    total
+ * @param int    itemsPerPage
+ * @param int    currentPage
+ *
+ * @param array  origins
+ * @param array  departments
+ #}
+{% extends "html/layouts/default.twig" %}
+{% import  "html/macros/pagination.twig" as pagination %}
+{% import  "html/macros/forms.twig"      as forms      %}
+{% block content %}
+<section>
+    <header><h1>Archive</h1></header>
+
+    <form class="usa-form">
+        <fieldset class="usa-fieldset">
+            <legend class="usa-legend">Search parameters</legend>
+            {{ forms.field_text(  'filename',   'filename',   'Filename',   search.filename   ?? '' ) }}
+            {{ forms.field_select('department', 'department', 'Department', search.department ?? '', departments, false, { onchange:'this.form.submit();' } ) }}
+            {{ forms.field_select('origin',     'origin',     'Origin',     search.origin     ?? '', origins,     false, { onchange:'this.form.submit();' } ) }}
+        </fieldset>
+    </form>
+
+    <table class="usa-table usa-table--compact">
+    <thead>
+        <tr><th>Filename</th>
+            <th>Origin</th>
+            <th>Uploaded</th>
+            <th>Department</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for f in files %}
+        <tr><td><a href="{{ uri('home.info', { id:f.id } ) }}">{{ f.filename }}</a></td>
+            <td>{{ f.origin }}</td>
+            <td>{{ f.uploaded|date(DATE_FORMAT) }}</td>
+            <td>{{ f.department }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+    {% if total > itemsPerPage %}
+        {{ pagination.pageLinks(REQUEST.uri.path, params, total, itemsPerPage, currentPage) }}
+    {% endif %}
+</section>
+{% endblock %}

@@ -10,6 +10,7 @@ $map    = $ROUTES->getMap();
 $map->tokens(['id' => '\d+']);
 
 $map->attach('home.', '/', function ($r) {
-    $r->get ('info',  '{id}', Web\Files\Info\Controller::class);
-    $r->get ('index', '',     Web\Files\List\Controller::class);
+    $r->get('download', '{id}/download', Web\Files\Download\Controller::class);
+    $r->get ('info',    '{id}',          Web\Files\Info\Controller::class);
+    $r->get ('index',   '',              Web\Files\List\Controller::class);
 });

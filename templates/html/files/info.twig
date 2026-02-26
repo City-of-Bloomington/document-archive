@@ -1,0 +1,17 @@
+{#
+ * @copyright 2026 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @param array file
+ #}
+{% extends "html/layouts/default.twig" %}
+{% block content %}
+<section>
+    <header><h1>{{ file.filename }}</h1></header>
+
+    <p>This file does not meet accessibility standards.</p>
+
+    <a href="{{ uri('home.download', {id:file.id}) }}">Download</a>
+
+</section>
+
+{% endblock %}

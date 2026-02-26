@@ -10,9 +10,6 @@ use GuzzleHttp\Psr7\ServerRequest;
 $startTime = microtime(true);
 
 include '../src/Web/bootstrap.php';
-ini_set('session.save_path', SITE_HOME.'/sessions');
-ini_set('session.cookie_path', BASE_URI);
-session_start();
 
 $REQUEST = ServerRequest::fromGlobals();
 $matcher = $ROUTES->getMatcher();
