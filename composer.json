@@ -1,0 +1,22 @@
+{
+    "require": {
+        "php": ">=8.3",
+        "aura/router":                      "@stable",
+        "graylog2/gelf-php":                "~1",
+        "guzzlehttp/psr7":                  "@stable",
+        "jumbojett/openid-connect-php":     "@stable",
+        "laminas/laminas-permissions-acl":  "@stable",
+        "twig/twig":                        "@stable"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "@stable",
+        "phpstan/phpstan": "@stable"
+    },
+    "autoload": {
+        "psr-4": {
+            "Application\\": "src/Application",
+            "Test\\":        "src/Test",
+            "Web\\":         "src/Web"
+        }
+    }
+}

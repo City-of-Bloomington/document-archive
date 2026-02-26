@@ -1,0 +1,9 @@
+build
+vendor
+data/site_config.php
+ansible/roles
+data/sessions/*
+*.cache
+*.css*
+*.mo
+make.conf

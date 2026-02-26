@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ LANG }}" lang="{{ LANG }}">
+{{ include('html/layouts/partials/head.twig') }}
+
+<body class="display-flex flex-column minh-viewport">
+    <a class="usa-skipnav" href="#main-content">Skip to main content</a>
+    {{ include('html/layouts/partials/gov-banner.twig') }}
+    <div class="usa-overlay"></div>
+    {{ include('html/layouts/partials/header.twig') }}
+    <main id="main-content" class="flex-1 tablet:padding-bottom-10">
+        <div class="grid-container">
+        {% if breadcrumbs is defined %}
+        {{ include('html/layouts/partials/breadcrumbs.twig') }}
+        {% endif %}
+        {% if ERROR_MESSAGES is defined %}
+        {{ include('html/layouts/partials/errorMessages.twig') }}
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+        </div>
+	</main>
+    {{ include('html/layouts/partials/footer.twig') }}
+    <script src="{{ USWDS_URL }}/js/uswds.min.js"></script>
+</body>
+</html>

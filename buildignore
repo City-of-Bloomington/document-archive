@@ -1,0 +1,7 @@
+buildignore
+build
+.git/
+.git*
+/ansible/roles/*
+/data/sessions/*
+/data/.*
