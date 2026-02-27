@@ -21,9 +21,9 @@
     <form class="usa-form">
         <fieldset class="usa-fieldset">
             <legend class="usa-legend">Search parameters</legend>
-            {{ forms.field_text(  'filename',   'filename',   'Filename',   search.filename   ?? '' ) }}
-            {{ forms.field_select('department', 'department', 'Department', search.department ?? '', departments, false, { onchange:'this.form.submit();' } ) }}
-            {{ forms.field_select('origin',     'origin',     'Origin',     search.origin     ?? '', origins,     false, { onchange:'this.form.submit();' } ) }}
+            {{ forms.field_text(  'filename',   'filename',   'Filename',   params.filename   ?? '' ) }}
+            {{ forms.field_select('department', 'department', 'Department', params.department ?? '', departments, false, { onchange:'this.form.submit();' } ) }}
+            {{ forms.field_select('origin',     'origin',     'Origin',     params.origin     ?? '', origins,     false, { onchange:'this.form.submit();' } ) }}
         </fieldset>
     </form>
 
