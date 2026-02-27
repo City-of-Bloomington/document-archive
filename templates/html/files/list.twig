@@ -24,6 +24,10 @@
             {{ forms.field_text(  'filename',   'filename',   'Filename',   params.filename   ?? '' ) }}
             {{ forms.field_select('department', 'department', 'Department', params.department ?? '', departments, false, { onchange:'this.form.submit();' } ) }}
             {{ forms.field_select('origin',     'origin',     'Origin',     params.origin     ?? '', origins,     false, { onchange:'this.form.submit();' } ) }}
+
+            <input name="sort" type="hidden" value="{{ sort }}" />
+            {{ forms.button('submit', 'Search', 'search') }}
+            <a class="usa-button" href="{{ BASE_URL }}">Reset</a>
         </fieldset>
     </form>
 
