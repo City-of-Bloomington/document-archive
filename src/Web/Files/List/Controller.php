@@ -15,14 +15,13 @@ class Controller extends \Web\Controller
         $repo   = new FilesRepository();
         $page   = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
 
-        $sort   = FilesRepository::SORT_DEFAULT;
         $params = self::cleanParameters();
+        $sort   = self::prepareSort($params['sort'] ?? FilesRepository::SORT_DEFAULT);
         $search = self::prepareSearch($params);
         $list   = $repo->search(fields:$search,
                                  order:$sort,
                           itemsPerPage:parent::ITEMS_PER_PAGE,
                            currentPage:$page);
-
 
         return new View($list['rows'] ?? [],
                         $params,
@@ -53,5 +52,16 @@ class Controller extends \Web\Controller
             if (!empty($_GET[$f])) { $s[$f] = $_GET[$f]; }
         }
         return $s;
+    }
+
+    private static function prepareSort(string $sort): ?string
+    {
+        $s = explode(' ', $sort);
+        if (in_array($s[0], FilesRepository::$sortable_columns)) {
+            return (isset($s[1]) && $s[1]=='desc')
+                    ? "$s[0] desc"
+                    :  $s[0];
+        }
+        return null;
     }
 }

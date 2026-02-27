@@ -12,6 +12,7 @@ class FilesRepository extends PdoRepository
 {
     public const SORT_DEFAULT = 'filename';
     public function __construct() { parent::__construct('files'); }
+    public static $sortable_columns = ['filename', 'origin', 'uploaded', 'department'];
 
     public function loadById(int $id): ?array
     {

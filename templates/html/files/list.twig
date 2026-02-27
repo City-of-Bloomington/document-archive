@@ -29,10 +29,10 @@
 
     <table class="usa-table usa-table--compact">
     <thead>
-        <tr><th>Filename</th>
-            <th>Origin</th>
-            <th>Uploaded</th>
-            <th>Department</th>
+        <tr>{{ pagination.sortable_header('filename',   'Filename',   sort, params) }}
+            {{ pagination.sortable_header('origin',     'Origin',     sort, params) }}
+            {{ pagination.sortable_header('uploaded',   'Uploaded',   sort, params) }}
+            {{ pagination.sortable_header('department', 'Department', sort, params) }}
         </tr>
     </thead>
     <tbody>
