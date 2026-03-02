@@ -4,6 +4,8 @@ APPNAME := archive
 REQS := sassc msgfmt
 K := $(foreach r, ${REQS}, $(if $(shell command -v ${r} 2> /dev/null), '', $(error "${r} not installed")))
 
+LANGUAGES := $(wildcard language/*/LC_MESSAGES)
+
 VERSION := $(shell cat VERSION | tr -d "[:space:]")
 COMMIT := $(shell git rev-parse --short HEAD)
 
@@ -13,6 +15,11 @@ clean:
 	rm -Rf build/${APPNAME}*
 
 compile:
+	for f in $(LANGUAGES); do \
+		msgfmt -cv $$f/errors.po -o $$f/errors.mo; \
+		msgfmt -cv $$f/labels.po -o $$f/labels.mo; \
+		msgfmt -cv $$f/messages.po -o $$f/messages.mo; \
+	done
 
 package:
 	[[ -d build ]] || mkdir build

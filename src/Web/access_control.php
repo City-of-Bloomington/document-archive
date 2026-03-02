@@ -29,7 +29,5 @@ foreach ($ROUTES->getMap()->getRoutes() as $r) {
 // Permissions for unauthenticated browsing
 $ACL->allow(null,  'home');
 
-$ACL->allow('Staff');
-
 // Administrator is allowed access to everything
 $ACL->allow('Administrator');

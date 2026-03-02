@@ -67,10 +67,43 @@ abstract class View
         }
         $this->twig->addExtension(new DebugExtension());
 
+        $this->twig->addFunction(new TwigFunction('_'  ,         [$this, 'translate'  ]));
         $this->twig->addFunction(new TwigFunction('uri',         [$this, 'generateUri']));
         $this->twig->addFunction(new TwigFunction('url',         [$this, 'generateUrl']));
         $this->twig->addFunction(new TwigFunction('isAllowed',   [$this, 'isAllowed'  ]));
         $this->twig->addFunction(new TwigFunction('http_build_query', 'http_build_query'));
+    }
+
+    /**
+     * Returns the gettext translation of msgid
+     *
+     * The default domain is "labels".  Any other text domains must be passed
+     * in the second parameter.
+     *
+     * For entries in the PO that are plurals, you must pass msgid as an array
+     * $this->translate( ['msgid', 'msgid_plural', $num] )
+     *
+     * @param mixed $msgid String or Array
+     * @param string $domain Alternate domain
+     * @return string
+     */
+    public static function translate($msgid, $domain=null): string
+    {
+        if (is_array($msgid)) {
+            return $domain
+                ? dngettext($domain, $msgid[0], $msgid[1], $msgid[2])
+                : ngettext (         $msgid[0], $msgid[1], $msgid[2]);
+        }
+        else {
+            return $domain
+                ? dgettext($domain, $msgid)
+                : gettext (         $msgid);
+        }
+    }
+
+    public static function _($msgid, $domain=null): string
+    {
+        return self::translate($msgid, $domain);
     }
 
     /**
@@ -112,8 +145,8 @@ abstract class View
     {
         global $ACL;
         $role = 'Anonymous';
-        if (isset  ($_SESSION['USER']) && $_SESSION['USER']->getRole()) {
-            $role = $_SESSION['USER']->getRole();
+        if (isset  ($_SESSION['USER']) && !empty($_SESSION['USER']['role'])) {
+            $role = $_SESSION['USER']['role'];
         }
         return $ACL->isAllowed($role, $resource, $action);
     }

@@ -10,6 +10,14 @@ include SITE_HOME.'/site_config.php';
 include APPLICATION_HOME.'/src/Web/routes.php';
 include APPLICATION_HOME.'/src/Web/access_control.php';
 
+$locale = LOCALE.'.utf8';
+putenv("LC_ALL=$locale");
+setlocale(LC_ALL, $locale);
+bindtextdomain('labels',   APPLICATION_HOME.'/language');
+bindtextdomain('messages', APPLICATION_HOME.'/language');
+bindtextdomain('errors',   APPLICATION_HOME.'/language');
+textdomain('labels');
+
 if (defined('GRAYLOG_DOMAIN') && defined('GRAYLOG_PORT')) {
     $graylog = new \Web\GraylogWriter(GRAYLOG_DOMAIN, GRAYLOG_PORT);
              set_error_handler([$graylog, 'error'    ]);
