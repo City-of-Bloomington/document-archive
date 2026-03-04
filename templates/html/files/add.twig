@@ -1,0 +1,39 @@
+{#
+ * @copyright 2026 City of Bloomington, Indiana
+ * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
+ * @param string department
+ * @param string origin
+ * @param string origin_id
+ *
+ * @param array departments
+ * @param array origins
+ *
+ * @param string accept
+ * @param string maxSize
+ * @param int    maxBytes
+ #}
+{% extends "html/layouts/default.twig" %}
+{% import  "html/macros/forms.twig"      as forms      %}
+{% block content %}
+<section>
+    <header><h1>Update File</h1></header>
+
+    <form class="usa-form"  method="post" enctype="multipart/form-data">
+        <fieldset class="usa-fieldset">
+            {{ forms.field_select('department', 'department', 'Department', department, departments, true ) }}
+            {{ forms.field_select('origin',     'origin',     'Origin',     origin,     origins,     true ) }}
+
+            {{ forms.field_number('origin_id', 'origin_id', 'ID', origin_id, false, {}, 'The record ID of the file in the original system') }}
+
+            {{ forms.field_file('file', 'file', 'File', null,
+                                accept, maxSize, maxBytes, true, {},
+                                accept ~ ' - ' ~ maxSize) }}
+
+            {{ forms.button('submit', _('save'), 'save') }}
+            {{ forms.actionLink(uri('home.index') , _('cancel') ) }}
+        </fieldset>
+    </form>
+
+</section>
+
+{% endblock %}

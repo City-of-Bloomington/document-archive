@@ -22,3 +22,12 @@ msgstr "The username and password combination you entered is not correct."
 
 msgid "ldap/unknownUser"
 msgstr "That username is not in LDAP.  You cannot set LDAP authentication if the user is not in LDAP."
+
+msgid "files/badServerPermissions"
+msgstr "The file was not able to be saved."
+
+msgid "files/unknownFileType"
+msgstr "The file you uploaded is not a valid filetype.  We only accept %s"
+
+msgid "files/missingExtension"
+msgstr "The file you uploaded is not a known filetype. Filenames must include an extension."

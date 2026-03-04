@@ -38,10 +38,9 @@ class View extends \Web\View
 
     private static function origins(): array
     {
-        return [
-            ['value'=>''],
-            ['value'=>'drupal']
-        ];
+        $opts = [['value' => '']];
+        foreach (FilesRepository::$origins as $o) { $opts[] = ['value'=>$o]; }
+        return $opts;
     }
 
     private static function departments(): array

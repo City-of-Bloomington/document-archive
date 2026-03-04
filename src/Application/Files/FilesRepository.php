@@ -10,9 +10,11 @@ use Application\PdoRepository;
 
 class FilesRepository extends PdoRepository
 {
-    public const SORT_DEFAULT = 'filename';
-    public function __construct() { parent::__construct('files'); }
+    public const  SORT_DEFAULT      = 'filename';
     public static $sortable_columns = ['filename', 'origin', 'uploaded', 'department'];
+    public static $origins          = ['drupal', 'onboard', 'data'];
+
+    public function __construct() { parent::__construct('files'); }
 
     public function loadById(int $id): ?array
     {

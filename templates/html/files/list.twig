@@ -31,6 +31,10 @@
         </fieldset>
     </form>
 
+    {% if isAllowed('files', 'add') %}
+    <div>{{ forms.actionLink( uri('files.add'), 'Add File', 'add') }}</div>
+    {% endif %}
+
     <table class="usa-table usa-table--compact">
     <thead>
         <tr>{{ pagination.sortable_header('filename',   'Filename',   sort, params) }}
