@@ -12,6 +12,9 @@ class PeopleRepository extends PdoRepository
 {
     public function __construct() { parent::__construct('people'); }
 
+    /**
+     * @throws \PDOException
+     */
     public function loadByUsername(string $username): ?array
     {
         $q = $this->pdo->prepare('select * from people where username=?');

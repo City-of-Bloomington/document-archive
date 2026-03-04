@@ -4,3 +4,5 @@ parameters:
   paths:
     - src/Application
     - src/Web
+  exceptions:
+    implicitThrows: false

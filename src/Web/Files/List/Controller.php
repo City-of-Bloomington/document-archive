@@ -17,7 +17,7 @@ class Controller extends \Web\Controller
 
         $params = self::cleanParameters();
         $sort   = self::prepareSort($params['sort'] ?? FilesRepository::SORT_DEFAULT);
-        $search = self::prepareSearch($params);
+        $search = self::prepareSearch();
         $list   = $repo->search(fields:$search,
                                  order:$sort,
                           itemsPerPage:parent::ITEMS_PER_PAGE,

@@ -17,6 +17,9 @@ abstract class PdoRepository
         $this->table = $table;
     }
 
+    /**
+     * @throws \PDOException
+     */
     public function find(array $fields=[], ?string $order=null, ?int $itemsPerPage=null, ?int $currentPage=null): array
     {
         $select = 'select * from '.$this->table;
@@ -52,6 +55,9 @@ abstract class PdoRepository
         return $sql;
     }
 
+	/**
+     * @throws \PDOException
+     */
 	protected function performSelect(string $select, array $params, int $itemsPerPage=null, ?int $currentPage=null): array
     {
 		$total = null;
@@ -76,5 +82,36 @@ abstract class PdoRepository
             'rows'  => $rows,
             'total' => $total ?? count($rows)
         ];
+    }
+
+    /**
+     *  @throws \PDOException
+     */
+    public function save(array $data): ?int
+    {
+        return isset($data['id']) ? $this->update($data) : $this->insert($data);
+    }
+
+    public function update(array $data): int
+    {
+        $fields = array_keys($data);
+        $cols   = [];
+        foreach ($fields as $f) {
+            if ($f != 'id') { $cols[] = "$f=:$f"; }
+        }
+        $c = implode(',', $cols);
+        $update = $this->pdo->prepare("update {$this->table} set $c where id=:id");
+        $update->execute($data);
+        return (int)$data['id'];
+    }
+
+    public function insert(array $data): int
+    {
+        $fields = array_keys($data);
+        $col    = implode(',', $fields);
+        $par    = implode(',', array_map(fn($f): string => ":$f", $fields));
+        $insert = $this->pdo->prepare("insert into {$this->table} ($col) values($par)");
+        $insert->execute($data);
+        return (int)$this->pdo->lastInsertId();
     }
 }
