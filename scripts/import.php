@@ -33,17 +33,24 @@ $sql     = "select f.fid,
                    from_unixtime(f.created)       as created,
                    du.name                        as username,
                    wu.department
-            from file_managed      f
-            join users_field_data du on f.uid=du.uid
-            join wave.users       wu on du.name=wu.username
-            where f.filemime like 'application/pdf'";
+            from      file_managed         f
+                 join users_field_data    du on  f.uid=du.uid
+                 join wave.users          wu on du.name=wu.username
+            left join wave.grackle_results g on replace(f.uri, 'public:/', '')=replace(g.url, 'https://bloomington.in.gov/sites/default/files', '')
+            where f.filemime like 'application/pdf'
+              and (g.score is null or g.score<90)";
 $query   = $drupal->query($sql);
 $files   = $query->fetchAll(\PDO::FETCH_ASSOC);
 foreach ($files as $f) {
     echo "$f[fid] $f[path]\n";
 
     $original  = DRUPAL_HOME.'/files'.$f['path'];
+
     $md5       = md5_file($original);
+    if (!$md5) {
+        echo "No such file: $original\n";
+        exit();
+    }
 
     $uploaded  = new \DateTime($f['created']);
     $ym        = $uploaded->format('Y/m');
