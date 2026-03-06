@@ -31,7 +31,7 @@ foreach ($files as $f) {
     $archive_id = $importer->import_file($f);
     echo "archive_id: $archive_id\n";
     $importer->update_links($f, $archive_id);
-    echo "\n";
+    echo "-------------------\n";
 }
 
 class Importer
@@ -124,11 +124,11 @@ class Importer
             $this->replace_links_in_html($table, $field, $file['filename'], (int)$file['fid'], $archive_id);
             $this->replace_links_in_html($table, $field, $encoded,          (int)$file['fid'], $archive_id);
         }
+        foreach ($links_tables as $table=>$field) {
+            $this->replace_links_in_url_fields($table, $field, $file, $archive_id);
+        }
     }
 
-    /**
-     * Search and replace links to filename and urlencoded filename in HTML
-     */
     function replace_links_in_html(string $table, string $field, string $filename, int $origin_id, int $archive_id)
     {
         $host  = 'https\:\/\/bloomington\.in\.gov';
@@ -143,13 +143,30 @@ class Importer
             $html   = preg_replace($regex, "href=\"https://aoi.bloomington.in.gov/archive?origin_id=$origin_id&archive_id=$archive_id\"", $r[$field]);
             $sql    = "update $table set $field=? where entity_id=?";
             $update = $this->drupal->prepare($sql);
-            $update->execute([$html, $r['entity_id']]);
-            print_r($r);
-            echo $html."\n";
+            echo "Updating $table for entity_id: $r[entity_id]\n";
+            $success = $update->execute([$html, $r['entity_id']]);
+            if (!$success) {
+                echo "Failed: $sql\n";
+                exit();
+            }
         }
     }
 
-    function replace_links_in_url_fields(string $table, string $field, string $filename, int $origin_id, int $archive_id)
+    function replace_links_in_url_fields(string $table, string $field, array $file, int $archive_id)
     {
+        $original = 'https://bloomington.in.gov/sites/default/files'.$file['path'];
+        $new      = "https://aoi.bloomington.in.gov/archive?origin_id=$file[fid]&archive_id=$archive_id";
+
+        $dir      = dirname($original);
+        $encoded  = $dir.'/'.str_replace('%', '\%', rawurlencode($file['filename']));
+        echo "Replacing $table: $original or $encoded\n";
+
+        $sql      = "update $table set $field=? where $field=? or $field=?";
+        $update   = $this->drupal->prepare($sql);
+        $success  = $update->execute([$new, $original, $encoded]);
+        if (!$success) {
+            echo "Failed: $sql\n";
+            exit();
+        }
     }
 }
