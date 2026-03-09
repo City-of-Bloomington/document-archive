@@ -107,7 +107,9 @@ class Importer
     function update_links(array $file, int $archive_id)
     {
         echo "Update links to archive_id: $archive_id\n";
-        $encoded = str_replace('%', '\%', rawurlencode($file['filename']));
+        $encoded = rawurlencode($file['filename']);
+        $url     = "/archive?origin_id=$file[fid]&archive_id=$archive_id&filename=$encoded";
+        $encoded = str_replace('%', '\%', $encoded);
 
         $content_tables = [
             'node__body'                 => 'body_value',
@@ -121,15 +123,16 @@ class Importer
         ];
 
         foreach ($content_tables as $table=>$field) {
-            $this->replace_links_in_html($table, $field, $file['filename'], (int)$file['fid'], $archive_id);
-            $this->replace_links_in_html($table, $field, $encoded,          (int)$file['fid'], $archive_id);
+
+            $this->replace_links_in_html($table, $field, $file['filename'], $url);
+            $this->replace_links_in_html($table, $field, $encoded,          $url);
         }
         foreach ($links_tables as $table=>$field) {
-            $this->replace_links_in_url_fields($table, $field, $file, $archive_id);
+            $this->replace_links_in_url_fields($table, $field, $file, $url);
         }
     }
 
-    function replace_links_in_html(string $table, string $field, string $filename, int $origin_id, int $archive_id)
+    function replace_links_in_html(string $table, string $field, string $filename, string $url)
     {
         $host  = 'https\:\/\/bloomington\.in\.gov';
         $path  = '\/sites\/default\/files\/[[:digit:]]{4}-[[:digit:]]{2}';
@@ -139,8 +142,7 @@ class Importer
         $query = $this->drupal->prepare($sql);
         $query->execute([$regex]);
         foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $r) {
-            $regex  = "/href=\"(($host)?$path\/$filename)\"/";
-            $html   = preg_replace($regex, "href=\"https://aoi.bloomington.in.gov/archive?origin_id=$origin_id&archive_id=$archive_id\"", $r[$field]);
+            $html   = preg_replace("/$regex/", "href=\"$url\"", $r[$field]);
             $sql    = "update $table set $field=? where entity_id=?";
             $update = $this->drupal->prepare($sql);
             echo "Updating $table for entity_id: $r[entity_id]\n";
@@ -152,18 +154,16 @@ class Importer
         }
     }
 
-    function replace_links_in_url_fields(string $table, string $field, array $file, int $archive_id)
+    function replace_links_in_url_fields(string $table, string $field, array $file, string $url)
     {
         $original = 'https://bloomington.in.gov/sites/default/files'.$file['path'];
-        $new      = "https://aoi.bloomington.in.gov/archive?origin_id=$file[fid]&archive_id=$archive_id";
-
         $dir      = dirname($original);
         $encoded  = $dir.'/'.str_replace('%', '\%', rawurlencode($file['filename']));
         echo "Replacing $table: $original or $encoded\n";
 
         $sql      = "update $table set $field=? where $field=? or $field=?";
         $update   = $this->drupal->prepare($sql);
-        $success  = $update->execute([$new, $original, $encoded]);
+        $success  = $update->execute([$url, $original, $encoded]);
         if (!$success) {
             echo "Failed: $sql\n";
             exit();
