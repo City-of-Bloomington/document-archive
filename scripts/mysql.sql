@@ -47,26 +47,13 @@ create table files (
 	mime_type        varchar(128) not null,
 	md5              varchar(32)  not null,
 	uploaded         datetime     not null default CURRENT_TIMESTAMP,
-	username         varchar(32)  not null,
-	department       varchar(32)  not null,
+	username         varchar(32),
+	department       varchar(32),
 	origin           varchar(32)  not null,
 	origin_id        int unsigned,
-	foreign key (department) references departments(name)
-);
-
-
-create table onboard (
-	id               int unsigned not null primary key auto_increment,
-	file_id          int unsigned not null,
-	committee        varchar(128) not null,
-	type             varchar(64)  not null,
+	committee        varchar(128),
+	type             varchar(64),
 	date             datetime,
 	title            varchar(128),
-	description      text,
-	foreign key (file_id) references files(id)
-);
-
-create table drupal (
-	id               int unsigned not null primary key auto_increment,
-	file_id          int unsigned not null,
+	foreign key (department) references departments(name)
 );
