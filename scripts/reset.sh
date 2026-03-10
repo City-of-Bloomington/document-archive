@@ -9,4 +9,6 @@ mysql --defaults-extra-file=/etc/mysql/debian.cnf drupal < /srv/backups/drupal/d
 cd /srv/sites/drupal && ./cache-rebuild.sh
 
 echo "Restoring OnBoard"
-mysql --defaults-extra-file=/etc/mysql/debian.cnf -e "update meetingFiles set url=null;"
+mysql --defaults-extra-file=/etc/mysql/debian.cnf -e "update     meetingFiles set url=null;" onboard
+mysql --defaults-extra-file=/etc/mysql/debian.cnf -e "update legislationFiles set url=null;" onboard
+mysql --defaults-extra-file=/etc/mysql/debian.cnf -e "update reports          set url=null;" onboard

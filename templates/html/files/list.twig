@@ -10,6 +10,8 @@
  *
  * @param array  origins
  * @param array  departments
+ * @param array  committees
+ * @param array  types
  #}
 {% extends "html/layouts/default.twig" %}
 {% import  "html/macros/pagination.twig" as pagination %}
@@ -24,6 +26,8 @@
             {{ forms.field_text(  'filename',   'filename',   'Filename',   params.filename   ?? '' ) }}
             {{ forms.field_select('department', 'department', 'Department', params.department ?? '', departments, false, { onchange:'this.form.submit();' } ) }}
             {{ forms.field_select('origin',     'origin',     'Origin',     params.origin     ?? '', origins,     false, { onchange:'this.form.submit();' } ) }}
+            {{ forms.field_select('committee',  'committee',  'Committee',  params.committee  ?? '', committees,  false, { onchange:'this.form.submit();' } ) }}
+            {{ forms.field_select('type',       'type',       'Type',       params.type       ?? '', types,       false, { onchange:'this.form.submit();' } ) }}
 
             <input name="sort" type="hidden" value="{{ sort }}" />
             {{ forms.button('submit', 'Search', 'search') }}
@@ -41,6 +45,8 @@
             {{ pagination.sortable_header('origin',     'Origin',     sort, params) }}
             {{ pagination.sortable_header('uploaded',   'Uploaded',   sort, params) }}
             {{ pagination.sortable_header('department', 'Department', sort, params) }}
+            {{ pagination.sortable_header('committee',  'Committee',  sort, params) }}
+            {{ pagination.sortable_header('type',       'Type',       sort, params) }}
         </tr>
     </thead>
     <tbody>
@@ -49,6 +55,8 @@
             <td>{{ f.origin }}</td>
             <td>{{ f.uploaded|date(DATE_FORMAT) }}</td>
             <td>{{ f.department }}</td>
+            <td>{{ f.committee }}</td>
+            <td>{{ f.type }}</td>
         </tr>
         {% endfor %}
     </tbody>

@@ -15,14 +15,14 @@ class OnBoard
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
-    public function update_links(array $file, int $archive_id)
+    public function update_links(array $file, int $archive_id, string $table)
     {
         echo "Update links to archive_id: $archive_id\n";
         $encoded = rawurlencode($file['filename']);
         $url     = "/archive?origin_id=$file[id]&archive_id=$archive_id&filename=$encoded";
         $encoded = str_replace('%', '\%', $encoded);
 
-        $sql = "update meetingFiles set url=? where id=?";
+        $sql = "update $table set url=? where id=?";
         $up  = $this->pdo->prepare($sql);
         $s   = $up->execute([$url, $file['id']]);
         if (!$s) {

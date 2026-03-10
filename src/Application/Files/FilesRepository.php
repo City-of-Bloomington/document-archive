@@ -11,7 +11,7 @@ use Application\PdoRepository;
 class FilesRepository extends PdoRepository
 {
     public const  SORT_DEFAULT      = 'filename';
-    public static $sortable_columns = ['filename', 'origin', 'uploaded', 'department'];
+    public static $sortable_columns = ['filename', 'origin', 'uploaded', 'department', 'type', 'committee'];
     public static $origins          = ['drupal', 'onboard', 'data'];
 
     public function __construct() { parent::__construct('files'); }
@@ -54,7 +54,19 @@ class FilesRepository extends PdoRepository
 
     public function departments(): array
     {
-        $q = $this->pdo->query('select * from departments');
-        return $q->fetchAll(\PDO::FETCH_ASSOC);
+        $q = $this->pdo->query('select name from departments order by name');
+        return $q->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    public function types(): array
+    {
+        $q = $this->pdo->query('select distinct type from files where type is not null order by type');
+        return $q->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    public function committees(): array
+    {
+        $q = $this->pdo->query('select distinct committee from files where committee is not null order by committee');
+        return $q->fetchAll(\PDO::FETCH_COLUMN);
     }
 }

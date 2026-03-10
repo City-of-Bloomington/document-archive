@@ -10,6 +10,8 @@ use Application\Files\FilesRepository;
 
 class View extends \Web\View
 {
+    private FilesRepository $files;
+
     public function __construct(array  $files,
                                 array  $params,
                                 string $sort,
@@ -19,6 +21,8 @@ class View extends \Web\View
     {
         parent::__construct();
 
+        $this->files = new FilesRepository();
+
         $this->vars = [
             'files'        => $files,
             'params'       => $params,
@@ -27,7 +31,9 @@ class View extends \Web\View
             'itemsPerPage' => $itemsPerPage,
             'currentPage'  => $currentPage,
             'origins'      => self::origins(),
-            'departments'  => self::departments()
+            'departments'  => $this->departments(),
+            'types'        => $this->types(),
+            'committees'   => $this->committees()
         ];
     }
 
@@ -43,11 +49,24 @@ class View extends \Web\View
         return $opts;
     }
 
-    private static function departments(): array
+    private function departments(): array
     {
-        $t    = new FilesRepository();
         $opts = [['value'=>'']];
-        foreach ($t->departments() as $d) { $opts[] = ['value'=>$d['name']]; }
+        foreach ($this->files->departments() as $d) { $opts[] = ['value'=>$d]; }
+        return $opts;
+    }
+
+    private function types(): array
+    {
+        $opts = [['value'=>'']];
+        foreach ($this->files->types() as $d) { $opts[] = ['value'=>$d]; }
+        return $opts;
+    }
+
+    private function committees(): array
+    {
+        $opts = [['value'=>'']];
+        foreach ($this->files->committees() as $d) { $opts[] = ['value'=>$d]; }
         return $opts;
     }
 }

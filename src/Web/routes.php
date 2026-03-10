@@ -19,5 +19,4 @@ $map->attach('home.', '/', function ($r) {
 
 $map->attach('files.', '/files', function ($r) {
     $r->get('add',    '/add',         Web\Files\Add\Controller::class);
-    $r->get('update', '/{id}/update', Web\Files\Update\Controller::class);
 });

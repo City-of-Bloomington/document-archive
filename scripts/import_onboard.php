@@ -12,23 +12,55 @@ include './OnBoard.php';
 $importer = new  Import($DATABASES['default']);
 $onboard  = new OnBoard($DATABASES['onboard']);
 
-$sql = "select f.id, f.type, f.title, f.internalFilename, f.filename, f.mime_type, f.created,
-               m.start,
-               c.name  as committee,
-               u.username
-        from meetingFiles f
-        join meetings     m on m.id=f.meeting_id
-        join committees   c on c.id=m.committee_id
-        left join people  u on u.id=f.updated_by";
-$query   = $onboard->pdo->query($sql);
-$files   = $query->fetchAll(\PDO::FETCH_ASSOC);
-foreach ($files as $f) {
-    echo "$f[id] $f[internalFilename]\n";
+$queries = [
+    'meetingFiles' =>
+    "select f.id, f.type, f.internalFilename, f.filename, f.mime_type, f.created,
+            f.title,
+            m.start,
+            c.name  as committee,
+            u.username
+     from meetingFiles f
+     join meetings     m on m.id=f.meeting_id
+     join committees   c on c.id=m.committee_id
+     left join people  u on u.id=f.updated_by",
 
-    $archive_id = $importer->import_file($f);
-    echo "archive_id: $archive_id\n";
-    $onboard->update_links($f, $archive_id);
-    echo "-------------------------------------------------\n";
+    'legislationFiles' =>
+    "select f.id, f.internalFilename, f.filename, f.mime_type, f.created,
+            null   as title,
+            null   as start,
+            t.name as type,
+            c.name as committee,
+            u.username
+     from legislationFiles f
+     join legislation      l on l.id=f.legislation_id
+     join legislationTypes t on t.id=l.type_id
+     join committees       c on c.id=l.committee_id
+     left join people      u on u.id=f.updated_by",
+
+    'reports' =>
+    "select f.id, f.internalFilename, f.filename, f.mime_type, f.created,
+            f.title,
+            f.reportDate as start,
+             'Report'    as type,
+            c.name       as committee,
+            u.username
+     from reports f
+     join committees c on c.id=f.committee_id
+     left join people u on u.id=f.updated_by"
+];
+
+
+foreach ($queries as $table=>$sql) {
+    $query   = $onboard->pdo->query($sql);
+    $files   = $query->fetchAll(\PDO::FETCH_ASSOC);
+    foreach ($files as $f) {
+        echo "$f[id] $f[internalFilename]\n";
+
+        $archive_id = $importer->import_file($f, $table);
+        echo "archive_id: $archive_id\n";
+        $onboard->update_links($f, $archive_id, $table);
+        echo "-------------------------------------------------\n";
+    }
 }
 
 class Import
@@ -60,9 +92,9 @@ class Import
         $this->insert = $this->pdo->prepare("insert into files ($col) values($par)");
     }
 
-    public function import_file(array $file): int
+    public function import_file(array $file, string $table): int
     {
-        $original  = ONBOARD_HOME.'/meetingFiles/'.$file['internalFilename'];
+        $original  = ONBOARD_HOME."/$table/".$file['internalFilename'];
         $md5       = md5_file($original);
         if (!$md5) {
             echo "No such file: $original\n";
