@@ -43,6 +43,13 @@ class FilesRepository extends PdoRepository
                     $params[$k] = "%$v%";
                 break;
 
+                case 'date':
+                    // The date field is a full date time; however, people will
+                    // be querying using only a date portion
+                    $where[] = "date(date)=:date";
+                    $params[$k] = $v;
+                break;
+
                 default:
                     $where[]    = "$k=:$k";
                     $params[$k] = $v;

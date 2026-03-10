@@ -16,8 +16,8 @@ class Controller extends \Web\Controller
         $page   = !empty($_GET['page']) ? (int)$_GET['page'] : 1;
 
         $params = self::cleanParameters();
-        $sort   = self::prepareSort($params['sort'] ?? FilesRepository::SORT_DEFAULT);
-        $search = self::prepareSearch();
+        $sort   = self::prepareSort(  $params['sort'] ?? FilesRepository::SORT_DEFAULT );
+        $search = self::prepareSearch($params);
         $list   = $repo->search(fields:$search,
                                  order:$sort,
                           itemsPerPage:parent::ITEMS_PER_PAGE,
@@ -38,18 +38,25 @@ class Controller extends \Web\Controller
         $regex  = '/[^a-zA-Z0-9\/\s\\\-]/';
         foreach ($fields as $f) {
             if (!empty($_GET[$f])) {
-                $params[$f] = preg_replace($regex, '', $_GET[$f]);
+                switch ($f) {
+                    case 'date':
+                        $date       = new \DateTime($_GET['date']);
+                        $params[$f] = $date->format('Y-m-d');
+                    break;
+                    default:
+                        $params[$f] = preg_replace($regex, '', $_GET[$f]);
+                }
             }
         }
         return $params;
     }
 
-    private static function prepareSearch(): array
+    private static function prepareSearch(array $params): array
     {
         $s = [];
         $fields = ['filename', 'mime_type', 'origin', 'department', 'type', 'committee', 'date'];
         foreach ($fields as $f) {
-            if (!empty($_GET[$f])) { $s[$f] = $_GET[$f]; }
+            if (!empty($params[$f])) { $s[$f] = $params[$f]; }
         }
         return $s;
     }
