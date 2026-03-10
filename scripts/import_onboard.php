@@ -61,6 +61,8 @@ foreach ($queries as $table=>$sql) {
         $onboard->update_links($f, $archive_id, $table);
         echo "-------------------------------------------------\n";
     }
+
+    $importer->update_committee_departments();
 }
 
 class Import
@@ -129,5 +131,80 @@ class Import
         print_r($d);
         $archive_id = (int)$this->pdo->lastInsertId();
         return $archive_id;
+    }
+
+    public function update_committee_departments()
+    {
+        $committees = [
+            "Animal Control Commission"                                      => 'Animal Shelter',
+            "Banneker Advisory Council"                                      => 'Parks',
+            "Bicycle and Pedestrian Safety Commission"                       => 'Planning',
+            "BIDAC (Bloomington Industrial Development Advisory Commission)" => 'ESD',
+            "Bloomington Arts Commission"                                    => 'ESD',
+            "Bloomington Digital Underground Advisory Committee"             => 'ITS',
+            "Bloomington/Monroe County Human Rights Commission"              => 'CFRD',
+            "Board of Housing Quality Appeals"                               => 'HAND',
+            "Board of Park Commissioners"                                    => 'Parks',
+            "Board of Public Safety"                                         => 'Police',
+            "Board of Public Works"                                          => 'Public Works',
+            "Board of Zoning Appeals"                                        => 'Planning',
+            "Capital Improvement Board (CIB)"                                => 'Council',
+            "Cascades Golf Course Advisory Council"                          => 'Parks',
+            "CDBG Funding Citizens Advisory Committee"                       => 'HAND',
+            "Citizens' Redistricting Advisory Commission"                    => 'Council',
+            "City Council"                                                   => 'Council',
+            "City Council Administration Committee"                          => 'Council',
+            "City Council Climate Action and Resilience Committee"           => 'Council',
+            "City Council Community Affairs Committee"                       => 'Council',
+            "City Council Housing Committee"                                 => 'Council',
+            "City Council Land Use Committee"                                => 'Council',
+            "City Council Public Safety Committee"                           => 'Council',
+            "City Council Sustainable Development Committee"                 => 'Council',
+            "City Council Transportation Committee"                          => 'Council',
+            "City Council Utilities and Sanitation Committee"                => 'Council',
+            "City of Bloomington Capital Improvement (CBCI)"                 => 'OOTM',
+            "Commission on Aging"                                            => 'CFRD',
+            "Commission on Hispanic and Latiné Affairs"                      => 'CFRD',
+            "Commission on Sustainability and Resilience"                    => 'ESD',
+            "Commission on the Status of Black Males"                        => 'CFRD',
+            "Commission on the Status of Children & Youth"                   => 'CFRD',
+            "Commission on the Status of Women"                              => 'CFRD',
+            "Common Council Budget Task Force"                               => 'Council',
+            "Common Council Committee on Council Processes"                  => 'Council',
+            "Common Council Fiscal Committee"                                => 'Council',
+            "Common Council Sidewalk Committee"                              => 'Council',
+            "Community Advisory on Public Safety Commission"                 => 'Council',
+            "Council for Community Accessibility"                            => 'CFRD',
+            "Dispatch Policy Board"                                          => 'Police',
+            "Dr. Martin Luther King Jr. Birthday Commission"                 => 'CFRD',
+            "Economic Development Commission"                                => 'ESD',
+            "Environmental Commission"                                       => 'Planning',
+            "Environmental Resources Advisory Council"                       => 'Parks',
+            "Farmers' Market Advisory Council"                               => 'Parks',
+            "Firefighters Pension Board"                                     => 'Fire',
+            "Hearing Officer"                                                => 'Planning',
+            "Historic Preservation Commission"                               => 'HAND',
+            "Hospital Re-Use Steering Committee"                             => 'OOTM',
+            "Jack Hopkins Social Services Committee"                         => 'Council',
+            "Monroe County Domestic Violence Coalition"                      => 'CFRD',
+            "MPO Citizens Advisory Committee"                                => 'Planning',
+            "MPO Policy Committee"                                           => 'Planning',
+            "MPO Technical Advisory Committee"                               => 'Planning',
+            "Parking Commission"                                             => 'Parking',
+            "Plan Commission"                                                => 'Planning',
+            "Plat Committee"                                                 => 'Planning',
+            "Public Safety Local Income Tax Committee"                       => 'Council',
+            "Redevelopment Commission"                                       => 'HAND',
+            "Traffic Commission"                                             => 'Planning',
+            "Transportation Commission"                                      => 'Planning',
+            "Tree Commission"                                                => 'Parks',
+            "Urban Enterprise Association"                                   => 'ESD',
+            "Utilities Service Board"                                        => 'Utilities'
+        ];
+
+        $update = $this->pdo->prepare('update files set department=? where committee=?');
+        foreach ($committees as $c=>$d) {
+            $update->execute([$d, $c]);
+        }
     }
 }
