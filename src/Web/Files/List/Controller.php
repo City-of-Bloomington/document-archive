@@ -33,7 +33,7 @@ class Controller extends \Web\Controller
 
     private static function cleanParameters(): array
     {
-        $fields = ['filename', 'mime_type', 'origin', 'department', 'type', 'committee', 'sort'];
+        $fields = ['filename', 'mime_type', 'origin', 'department', 'type', 'committee', 'date', 'sort'];
         $params = [];
         $regex  = '/[^a-zA-Z0-9\/\s\\\-]/';
         foreach ($fields as $f) {
@@ -47,7 +47,7 @@ class Controller extends \Web\Controller
     private static function prepareSearch(): array
     {
         $s = [];
-        $fields = ['filename', 'mime_type', 'origin', 'department', 'type', 'committee'];
+        $fields = ['filename', 'mime_type', 'origin', 'department', 'type', 'committee', 'date'];
         foreach ($fields as $f) {
             if (!empty($_GET[$f])) { $s[$f] = $_GET[$f]; }
         }

@@ -11,7 +11,7 @@ use Application\PdoRepository;
 class FilesRepository extends PdoRepository
 {
     public const  SORT_DEFAULT      = 'filename';
-    public static $sortable_columns = ['filename', 'origin', 'uploaded', 'department', 'type', 'committee'];
+    public static $sortable_columns = ['filename', 'origin', 'uploaded', 'department', 'type', 'committee', 'date'];
     public static $origins          = ['drupal', 'onboard', 'data'];
 
     public function __construct() { parent::__construct('files'); }
