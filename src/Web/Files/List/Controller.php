@@ -35,7 +35,7 @@ class Controller extends \Web\Controller
     {
         $fields = ['filename', 'mime_type', 'origin', 'department', 'type', 'committee', 'date', 'sort'];
         $params = [];
-        $regex  = '/[^a-zA-Z0-9\/\s\\\-]/';
+        $regex  = '/[^a-zA-Z0-9_\/\s\-\.]/';
         foreach ($fields as $f) {
             if (!empty($_GET[$f])) {
                 switch ($f) {
