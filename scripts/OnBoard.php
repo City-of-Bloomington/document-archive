@@ -19,7 +19,22 @@ class OnBoard
     {
         echo "Update links to archive_id: $archive_id\n";
         $encoded = rawurlencode($file['filename']);
-        $url     = "/archive?origin_id=$file[id]&archive_id=$archive_id&filename=$encoded";
+        $params  = [
+            'origin'     => 'onboard',
+            'origin_id'  => $file['id'],
+            'archive_id' => $archive_id,
+            'filename'   => $file['filename' ],
+            'committee'  => $file['committee'],
+            'type'       => $file['type'     ]
+        ];
+
+        if ($file['start']) {
+            $d = new \DateTime($file['start']);
+            $params['date'] = $d->format('Y-m-d');
+        }
+
+        #$url     = BASE_URL."?origin=onboard&origin_id=$file[id]&archive_id=$archive_id&filename=$encoded";
+        $url     = BASE_URL.'?'.http_build_query($params);
         $encoded = str_replace('%', '\%', $encoded);
 
         $sql = "update $table set url=? where id=?";

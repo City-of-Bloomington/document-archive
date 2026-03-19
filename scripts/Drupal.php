@@ -19,7 +19,7 @@ class Drupal
     {
         echo "Update links to archive_id: $archive_id\n";
         $encoded = rawurlencode($file['filename']);
-        $url     = "/archive?origin_id=$file[fid]&archive_id=$archive_id&filename=$encoded";
+        $url     = BASE_URL."?origin=drupal&origin_id=$file[fid]&archive_id=$archive_id&filename=$encoded";
         $encoded = str_replace('%', '\%', $encoded);
 
         $content_tables = [

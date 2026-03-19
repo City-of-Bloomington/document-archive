@@ -54,7 +54,7 @@ foreach ($queries as $table=>$sql) {
     $query   = $onboard->pdo->query($sql);
     $files   = $query->fetchAll(\PDO::FETCH_ASSOC);
     foreach ($files as $f) {
-        echo "$f[id] $f[internalFilename]\n";
+        echo "$f[id] $f[internalFilename] $f[start]\n";
 
         $archive_id = $importer->import_file($f, $table);
         echo "archive_id: $archive_id\n";
