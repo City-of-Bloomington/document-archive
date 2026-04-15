@@ -44,7 +44,7 @@ class View extends \Web\View
     {
         $t    = new FilesRepository();
         $opts = [['value'=>'']];
-        foreach ($t->departments() as $d) { $opts[] = ['value'=>$d['name']]; }
+        foreach ($t->departments() as $d) { $opts[] = ['value'=>$d]; }
         return $opts;
     }
 
