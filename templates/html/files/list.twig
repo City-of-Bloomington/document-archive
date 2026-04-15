@@ -54,7 +54,7 @@
     <tbody>
         {% for f in files %}
         <tr><td><a href="{{ uri('home.info', { id:f.id } ) }}">{{ f.filename }}</a></td>
-            <td>{{ f.origin }}</td>
+            <td>{{ _(f.origin) }}</td>
             <td>{{ f.department }}</td>
             <td>{{ f.committee }}</td>
             <td>{{ f.type }}</td>

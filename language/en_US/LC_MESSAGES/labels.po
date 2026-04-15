@@ -123,3 +123,12 @@ msgid "profile"
 msgid_plural "profiles"
 msgstr[0] "Profile"
 msgstr[1] "Profiles"
+
+msgid "drupal"
+msgstr "Website"
+
+msgid "onboard"
+msgstr "OnBoard"
+
+msgid "data"
+msgstr "Data Portal"

@@ -45,7 +45,7 @@ class View extends \Web\View
     private static function origins(): array
     {
         $opts = [['value' => '']];
-        foreach (FilesRepository::$origins as $o) { $opts[] = ['value'=>$o]; }
+        foreach (FilesRepository::$origins as $o) { $opts[] = ['value'=>$o, 'label'=>parent::_($o)]; }
         return $opts;
     }
 
