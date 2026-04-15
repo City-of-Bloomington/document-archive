@@ -21,22 +21,24 @@
     <header><h1>Legacy Inaccessible File Archive</h1></header>
 
     <div class="grid-row">
-        <div class="desktop:grid-col-7 desktop:order-last desktop:margin-left-1">{{ include('html/about.twig') }}</div>
-        <form class="usa-form desktop:grid-col-4">
-            <fieldset class="usa-fieldset">
-                <legend class="usa-legend">Search parameters</legend>
-                {{ forms.field_text(  'filename',   'filename',   'Filename',   params.filename   ?? '' ) }}
-                {{ forms.field_select('department', 'department', 'Department', params.department ?? '', departments ) }}
-                {{ forms.field_select('origin',     'origin',     'Origin',     params.origin     ?? '', origins     ) }}
-                {{ forms.field_select('committee',  'committee',  'Committee',  params.committee  ?? '', committees  ) }}
-                {{ forms.field_select('type',       'type',       'Type',       params.type       ?? '', types       ) }}
-                {{ forms.field_date(  'date',       'date',       'Date',       params.date       ?? '' ) }}
+        <div class="desktop:grid-col-7 desktop:order-last desktop:margin-left-2">{{ include('html/about.twig') }}</div>
+        <div class="desktop:grid-col-4">
+            <h2>Search the Archive</h2>
+            <form class="usa-form">
+                <fieldset class="usa-fieldset">
+                    {{ forms.field_text(  'filename',   'filename',   'Filename',   params.filename   ?? '' ) }}
+                    {{ forms.field_select('department', 'department', 'Department', params.department ?? '', departments ) }}
+                    {{ forms.field_select('origin',     'origin',     'Origin',     params.origin     ?? '', origins     ) }}
+                    {{ forms.field_select('committee',  'committee',  'Committee',  params.committee  ?? '', committees  ) }}
+                    {{ forms.field_select('type',       'type',       'Type',       params.type       ?? '', types       ) }}
+                    {{ forms.field_date(  'date',       'date',       'Date',       params.date       ?? '' ) }}
 
-                <input name="sort" type="hidden" value="{{ sort }}" />
-                {{ forms.button('submit', 'Search', 'search') }}
-                <a class="usa-button" href="{{ BASE_URL }}">Reset</a>
-            </fieldset>
-        </form>
+                    <input name="sort" type="hidden" value="{{ sort }}" />
+                    {{ forms.button('submit', 'Search', 'search') }}
+                    <a class="usa-button" href="{{ BASE_URL }}">Reset</a>
+                </fieldset>
+            </form>
+        </div>
     </div>
 
     {% if isAllowed('files', 'add') %}
