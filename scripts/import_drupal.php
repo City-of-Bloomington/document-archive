@@ -12,7 +12,7 @@ include './Drupal.php';
 $importer = new Import($DATABASES['default']);
 $drupal   = new Drupal($DATABASES['drupal' ]);
 
-$sql     = "select f.fid,
+$sql     = "select distinct f.fid,
                    f.filename,
                    f.filemime,
                    replace(f.uri, 'public:/', '') as path,
