@@ -11,16 +11,16 @@
         {% if file.title %}<h2>{{ file.title }}</h2>{% endif %}
     </header>
     <table>
-    {% if file.origin     %}<tr><th>Origin</th>    <td>{{ file.origin     }}</td></tr>{% endif %}
+    {% if file.origin     %}<tr><th>Origin</th>    <td>{{ _(file.origin)  }}</td></tr>{% endif %}
     {% if file.department %}<tr><th>Department</th><td>{{ file.department }}</td></tr>{% endif %}
     {% if file.committee  %}<tr><th>Committee</th> <td>{{ file.committee  }}</td></tr>{% endif %}
     {% if file.type       %}<tr><th>Type</th>      <td>{{ file.type       }}</td></tr>{% endif %}
-    {% if file.date       %}<tr><th>Date</th>      <td>{{ file.date       }}</td></tr>{% endif %}
+    {% if file.date       %}<tr><th>Date</th>      <td>{{ file.date|date(DATE_FORMAT) }}</td></tr>{% endif %}
     </table>
 
-    <p>This file does not meet accessibility standards.</p>
+    <p>This file does not meet contemporary accessibility standards.</p>
+    <a href="{{ uri('home.download', {id:file.id}) }}">{{ file.filename }}</a>
 
-    <a href="{{ uri('home.download', {id:file.id}) }}">Download</a>
-
+    {{ include('html/about.twig') }}
 </section>
 {% endblock %}

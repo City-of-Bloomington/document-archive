@@ -18,23 +18,26 @@
 {% import  "html/macros/forms.twig"      as forms      %}
 {% block content %}
 <section>
-    <header><h1>Archive</h1></header>
+    <header><h1>Legacy Inaccessible File Archive</h1></header>
 
-    <form class="usa-form">
-        <fieldset class="usa-fieldset">
-            <legend class="usa-legend">Search parameters</legend>
-            {{ forms.field_text(  'filename',   'filename',   'Filename',   params.filename   ?? '' ) }}
-            {{ forms.field_select('department', 'department', 'Department', params.department ?? '', departments, false, { onchange:'this.form.submit();' } ) }}
-            {{ forms.field_select('origin',     'origin',     'Origin',     params.origin     ?? '', origins,     false, { onchange:'this.form.submit();' } ) }}
-            {{ forms.field_select('committee',  'committee',  'Committee',  params.committee  ?? '', committees,  false, { onchange:'this.form.submit();' } ) }}
-            {{ forms.field_select('type',       'type',       'Type',       params.type       ?? '', types,       false, { onchange:'this.form.submit();' } ) }}
-            {{ forms.field_date(  'date',       'date',       'Date',       params.date       ?? '' ) }}
+    <div class="grid-row">
+        <div class="desktop:grid-col-7 desktop:order-last desktop:margin-left-1">{{ include('html/about.twig') }}</div>
+        <form class="usa-form desktop:grid-col-4">
+            <fieldset class="usa-fieldset">
+                <legend class="usa-legend">Search parameters</legend>
+                {{ forms.field_text(  'filename',   'filename',   'Filename',   params.filename   ?? '' ) }}
+                {{ forms.field_select('department', 'department', 'Department', params.department ?? '', departments, false, { onchange:'this.form.submit();' } ) }}
+                {{ forms.field_select('origin',     'origin',     'Origin',     params.origin     ?? '', origins,     false, { onchange:'this.form.submit();' } ) }}
+                {{ forms.field_select('committee',  'committee',  'Committee',  params.committee  ?? '', committees,  false, { onchange:'this.form.submit();' } ) }}
+                {{ forms.field_select('type',       'type',       'Type',       params.type       ?? '', types,       false, { onchange:'this.form.submit();' } ) }}
+                {{ forms.field_date(  'date',       'date',       'Date',       params.date       ?? '' ) }}
 
-            <input name="sort" type="hidden" value="{{ sort }}" />
-            {{ forms.button('submit', 'Search', 'search') }}
-            <a class="usa-button" href="{{ BASE_URL }}">Reset</a>
-        </fieldset>
-    </form>
+                <input name="sort" type="hidden" value="{{ sort }}" />
+                {{ forms.button('submit', 'Search', 'search') }}
+                <a class="usa-button" href="{{ BASE_URL }}">Reset</a>
+            </fieldset>
+        </form>
+    </div>
 
     {% if isAllowed('files', 'add') %}
     <div>{{ forms.actionLink( uri('files.add'), 'Add File', 'add') }}</div>
@@ -45,7 +48,7 @@
         <tr>{{ pagination.sortable_header('filename',   'Filename',   sort, params) }}
             {{ pagination.sortable_header('origin',     'Origin',     sort, params) }}
             {{ pagination.sortable_header('department', 'Department', sort, params) }}
-            {{ pagination.sortable_header('committee',  'Committee',  sort, params) }}
+            {{ pagination.sortable_header('committee',  'Board',      sort, params) }}
             {{ pagination.sortable_header('type',       'Type',       sort, params) }}
             {{ pagination.sortable_header('date',       'Date',       sort, params) }}
             {{ pagination.sortable_header('uploaded',   'Uploaded',   sort, params) }}
