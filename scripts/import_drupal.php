@@ -21,8 +21,8 @@ $sql     = "select f.fid,
                    wu.department
             from      file_managed         f
                  join users_field_data    du on  f.uid=du.uid
-                 join wave.users          wu on du.name=wu.username
-            left join wave.grackle_results g on replace(f.uri, 'public:/', '')=replace(g.url, 'https://bloomington.in.gov/sites/default/files', '')
+                 join webscan.users       wu on du.name=wu.username
+            left join webscan.grackle_results g on replace(f.uri, 'public:/', '')=replace(g.url, 'https://bloomington.in.gov/sites/default/files', '')
             where f.filemime like 'application/pdf'
               and (g.score is null or g.score<90)";
 $query   = $drupal->pdo->query($sql);
