@@ -22,7 +22,8 @@ $queries = [
      from meetingFiles f
      join meetings     m on m.id=f.meeting_id
      join committees   c on c.id=m.committee_id
-     left join people  u on u.id=f.updated_by",
+     left join people  u on u.id=f.updated_by
+     where f.internalFilename is not null",
 
     'legislationFiles' =>
     "select f.id, f.internalFilename, f.filename, f.mime_type, f.created,
@@ -35,7 +36,8 @@ $queries = [
      join legislation      l on l.id=f.legislation_id
      join legislationTypes t on t.id=l.type_id
      join committees       c on c.id=l.committee_id
-     left join people      u on u.id=f.updated_by",
+     left join people      u on u.id=f.updated_by
+     where f.internalFilename is not null",
 
     'reports' =>
     "select f.id, f.internalFilename, f.filename, f.mime_type, f.created,
@@ -46,7 +48,8 @@ $queries = [
             u.username
      from reports f
      join committees c on c.id=f.committee_id
-     left join people u on u.id=f.updated_by"
+     left join people u on u.id=f.updated_by
+     where f.internalFilename is not null"
 ];
 
 
