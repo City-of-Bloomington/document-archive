@@ -14,12 +14,12 @@ class Controller extends \Web\Controller
     {
         if ( isset($_POST['origin'])) {
             $req = [
-                'origin'     => $_POST['origin'    ],
-                'origin_id'  => $_POST['origin_id' ],
-                'department' => $_POST['department'],
-                'username'   => $_SESSION['USER']['username']
+                'origin'   => $_POST['origin'],
+                'username' => $_SESSION['USER']['username']
             ];
-
+            foreach (Add::$optional_fields as $f) {
+                if (!empty($_POST[$f])) { $req[$f] = $_POST[$f]; }
+            }
 
             if (isset($_FILES['file']) && $_FILES['file']['error'] != UPLOAD_ERR_NO_FILE) {
                 $req['filename']   = basename($_FILES['file']['name']);

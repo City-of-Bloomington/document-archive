@@ -10,6 +10,15 @@ class Add
 {
     private $repo;
 
+    public static $optional_fields = [
+        'origin_id',
+        'department',
+        'committee',
+        'type',
+        'date',
+        'title'
+    ];
+
     public function __construct()
     {
         $this->repo = new FilesRepository();
@@ -30,11 +39,12 @@ class Add
             'filename'   => $req['filename'],
             'mime_type'  => mime_content_type($req['file']),
             'md5'        =>          md5_file($req['file']),
-            'origin'     => $req['origin'    ],
-            'department' => $req['department'],
-            'username'   => $req['username'  ]
+            'origin'     => $req['origin'  ],
+            'username'   => $req['username']
         ];
-        if (!empty($req['origin_id'])) { $file['origin_id'] = $req['origin_id']; }
+        foreach (self::$optional_fields as $f) {
+            if (!empty($req[$f])) { $file[$f] = $req[$f]; }
+        }
 
         $errors = self::validate($file);
         if ($errors) {

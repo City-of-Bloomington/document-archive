@@ -6,26 +6,31 @@
 declare (strict_types=1);
 namespace Web\Files\Add;
 
+use Application\Files\Add as Command;
 use Application\Files\FilesRepository;
 
 class View extends \Web\View
 {
+    private FilesRepository $repo;
+
     public function __construct(?array $request=[])
     {
         parent::__construct();
 
+        $this->repo = new FilesRepository();
         list($maxSize, $maxBytes) = self::maxUpload();
 
         $this->vars = [
-             'origin'      => $request['origin'    ] ?? '',
-             'origin_id'   => $request['origin_id' ] ?? '',
-             'department'  => $request['department'] ?? '',
+             'origin'      => $request['origin'] ?? '',
              'origins'     => self::origins(),
-             'departments' => self::departments(),
+             'departments' => self::options('departments'),
+             'committees'  => self::options('committees'),
+             'types'       => self::options('types'),
              'accept'      => '.pdf',
              'maxBytes'    => $maxBytes,
              'maxSize'     => $maxSize
         ];
+        foreach (Command::$optional_fields as $f) { $this->vars[$f] = $request[$f] ?? null; }
     }
 
     public function render(): string
@@ -40,11 +45,10 @@ class View extends \Web\View
         return $opts;
     }
 
-    private static function departments(): array
+    private function options(string $field): array
     {
-        $t    = new FilesRepository();
         $opts = [['value'=>'']];
-        foreach ($t->departments() as $d) { $opts[] = ['value'=>$d]; }
+        foreach ($this->repo->$field() as $o) { $opts[] = ['value'=>$o]; }
         return $opts;
     }
 

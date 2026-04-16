@@ -4,6 +4,11 @@
  * @param string department
  * @param string origin
  * @param string origin_id
+ * @param string department
+ * @param string committee
+ * @param string type
+ * @param string date
+ * @param string title
  *
  * @param array departments
  * @param array origins
@@ -18,16 +23,29 @@
 <section>
     <header><h1>Update File</h1></header>
 
-    <form class="usa-form"  method="post" enctype="multipart/form-data">
+    <form class="usa-form usa-form--large" method="post" enctype="multipart/form-data">
         <fieldset class="usa-fieldset">
+            <legend class="usa-legend usa-legend--large">Origin</legend>
             {{ forms.field_select('department', 'department', 'Department', department, departments, true ) }}
             {{ forms.field_select('origin',     'origin',     'Origin',     origin,     origins,     true ) }}
 
             {{ forms.field_number('origin_id', 'origin_id', 'ID', origin_id, false, {}, 'The record ID of the file in the original system') }}
+        </fieldset>
+
+        <fieldset class="usa-fieldset">
+            <legend class="usa-legend usa-legend--large">Upload</legend>
 
             {{ forms.field_file('file', 'file', 'File', null,
                                 accept, maxSize, maxBytes, true, {},
                                 accept ~ ' - ' ~ maxSize) }}
+        </fieldset>
+
+        <fieldset class="usa-fieldset">
+            <legend class="usa-legend usa-legend--large">Additional Information</legend>
+            {{ forms.field_date(  'date',      'date',      'Date',      date ) }}
+            {{ forms.field_text(  'title',     'title',     'Title',     title) }}
+            {{ forms.field_select('committee', 'committee', 'Committee', committee, committees ) }}
+            {{ forms.field_select('type',      'type',      'Type',      type,      types      ) }}
 
             {{ forms.button('submit', _('save'), 'save') }}
             {{ forms.actionLink(uri('home.index') , _('cancel') ) }}
