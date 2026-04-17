@@ -18,5 +18,7 @@ $map->attach('home.', '/', function ($r) {
 });
 
 $map->attach('files.', '/files', function ($r) {
-    $r->get('add',    '/add',         Web\Files\Add\Controller::class)->allows(['POST']);
+    $r->get('add',    '/add',         Web\Files\Add\Controller::class   )->allows(['POST']);
+    $r->get('update', '/{id}/update', Web\Files\Update\Controller::class)->allows(['POST']);
+    $r->get('delete', '/{id}/delete', Web\Files\Delete\Controller::class);
 });

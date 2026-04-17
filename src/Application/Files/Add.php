@@ -10,15 +10,6 @@ class Add
 {
     private $repo;
 
-    public static $optional_fields = [
-        'origin_id',
-        'department',
-        'committee',
-        'type',
-        'date',
-        'title'
-    ];
-
     public function __construct()
     {
         $this->repo = new FilesRepository();
@@ -42,11 +33,11 @@ class Add
             'origin'     => $req['origin'  ],
             'username'   => $req['username']
         ];
-        foreach (self::$optional_fields as $f) {
+        foreach (FilesRepository::FIELDS_OPTIONAL as $f) {
             if (!empty($req[$f])) { $file[$f] = $req[$f]; }
         }
 
-        $errors = self::validate($file);
+        $errors = FilesRepository::validate($file);
         if ($errors) {
             return ['errors' => $errors];
         }
@@ -67,18 +58,4 @@ class Add
         return ['id'=>$id];
     }
 
-    /**
-     * Returns any errors with the file to be saved to the database
-     */
-    private static function validate(array $file): array
-    {
-        $errors   = [];
-        $required = ['internalFilename', 'filename', 'mime_type', 'md5', 'origin', 'department', 'username'];
-        foreach ($required as $f) {
-            if (empty($file[$f])) {
-                $errors[] = "Missing $f";
-            }
-        }
-        return $errors;
-    }
 }

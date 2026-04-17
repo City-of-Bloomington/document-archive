@@ -10,9 +10,11 @@ use Application\PdoRepository;
 
 class FilesRepository extends PdoRepository
 {
-    public const  SORT_DEFAULT      = 'filename';
-    public static $sortable_columns = ['filename', 'origin', 'uploaded', 'department', 'type', 'committee', 'date'];
-    public static $origins          = ['drupal', 'onboard', 'data'];
+    public const SORT_DEFAULT    = 'filename';
+    public const FIELDS_REQUIRED = ['internalFilename', 'filename', 'mime_type', 'md5', 'origin', 'department', 'username'];
+    public const FIELDS_OPTIONAL = ['origin_id', 'department', 'committee', 'type', 'date', 'title'];
+    public const FIELDS_SORTABLE = ['filename', 'origin', 'uploaded', 'department', 'type', 'committee', 'date'];
+    public const ORIGINS         = ['drupal', 'onboard', 'data'];
 
     public function __construct() { parent::__construct('files'); }
 
@@ -26,6 +28,12 @@ class FilesRepository extends PdoRepository
             return $r[0];
         }
         return null;
+    }
+
+    public function delete(int $id)
+    {
+        $del = $this->pdo->prepare('delete from files where id=?');
+        $del->execute([$id]);
     }
 
     public function search(array $fields=[], string $order=self::SORT_DEFAULT, ?int $itemsPerPage=null, ?int $currentPage=null): array
@@ -75,5 +83,18 @@ class FilesRepository extends PdoRepository
     {
         $q = $this->pdo->query('select distinct committee from files where committee is not null order by committee');
         return $q->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    public static function validate(array $file): array
+    {
+        $errors   = [];
+        foreach (self::FIELDS_REQUIRED as $f) {
+            if (empty($file[$f])) { $errors[] = "Missing $f"; }
+        }
+
+        if (!in_array($file['origin'], self::ORIGINS)) {
+            $errors[] = 'Invalid origin';
+        }
+        return $errors;
     }
 }

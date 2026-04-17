@@ -7,6 +7,7 @@ declare (strict_types=1);
 namespace Web\Files\Add;
 
 use Application\Files\Add;
+use Application\Files\FilesRepository;
 
 class Controller extends \Web\Controller
 {
@@ -17,7 +18,7 @@ class Controller extends \Web\Controller
                 'origin'   => $_POST['origin'],
                 'username' => $_SESSION['USER']['username']
             ];
-            foreach (Add::$optional_fields as $f) {
+            foreach (FilesRepository::FIELDS_OPTIONAL as $f) {
                 if (!empty($_POST[$f])) { $req[$f] = $_POST[$f]; }
             }
 

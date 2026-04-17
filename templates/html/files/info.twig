@@ -2,14 +2,21 @@
  * @copyright 2026 City of Bloomington, Indiana
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  * @param array file
+ * @param array actionLinks
  #}
 {% extends "html/layouts/default.twig" %}
+{% import  'html/macros/forms.twig' as forms %}
 {% block content %}
 <section>
     <header>
         <h1>{{ file.filename }}</h1>
         {% if file.title %}<h2>{{ file.title }}</h2>{% endif %}
     </header>
+
+    {% if actionLinks %}
+    <nav>{% for l in actionLinks %}{{ forms.actionLink(l.url, l.label, l.class ?? null) }}{% endfor %}</nav>
+    {% endif %}
+
     <table>
     {% if file.origin     %}<tr><th>Origin</th>    <td>{{ _(file.origin)  }}</td></tr>{% endif %}
     {% if file.department %}<tr><th>Department</th><td>{{ file.department }}</td></tr>{% endif %}

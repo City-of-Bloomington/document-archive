@@ -35,7 +35,7 @@ class Controller extends \Web\Controller
     {
         $fields = ['filename', 'mime_type', 'origin', 'department', 'type', 'committee', 'date', 'sort'];
         $params = [];
-        $regex  = '/[^a-zA-Z0-9_\/\s\-\.]/';
+        $regex  = '/[^a-zA-Z0-9_\/\s\-\.\(\)]/';
         foreach ($fields as $f) {
             if (!empty($_GET[$f])) {
                 switch ($f) {
@@ -64,7 +64,7 @@ class Controller extends \Web\Controller
     private static function prepareSort(string $sort): ?string
     {
         $s = explode(' ', $sort);
-        if (in_array($s[0], FilesRepository::$sortable_columns)) {
+        if (in_array($s[0], FilesRepository::FIELDS_SORTABLE)) {
             return (isset($s[1]) && $s[1]=='desc')
                     ? "$s[0] desc"
                     :  $s[0];

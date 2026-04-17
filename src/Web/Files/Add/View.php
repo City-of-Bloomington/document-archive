@@ -6,7 +6,6 @@
 declare (strict_types=1);
 namespace Web\Files\Add;
 
-use Application\Files\Add as Command;
 use Application\Files\FilesRepository;
 
 class View extends \Web\View
@@ -30,7 +29,7 @@ class View extends \Web\View
              'maxBytes'    => $maxBytes,
              'maxSize'     => $maxSize
         ];
-        foreach (Command::$optional_fields as $f) { $this->vars[$f] = $request[$f] ?? null; }
+        foreach (FilesRepository::FIELDS_OPTIONAL as $f) { $this->vars[$f] = $request[$f] ?? null; }
     }
 
     public function render(): string
@@ -41,7 +40,7 @@ class View extends \Web\View
     private static function origins(): array
     {
         $opts = [['value'=>'']];
-        foreach (FilesRepository::$origins as $o) { $opts[] = ['value'=>$o, 'label'=>parent::_($o)]; }
+        foreach (FilesRepository::ORIGINS as $o) { $opts[] = ['value'=>$o, 'label'=>parent::_($o)]; }
         return $opts;
     }
 
