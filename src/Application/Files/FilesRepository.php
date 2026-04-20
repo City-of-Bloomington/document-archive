@@ -15,6 +15,7 @@ class FilesRepository extends PdoRepository
     public const FIELDS_OPTIONAL = ['origin_id', 'department', 'committee', 'type', 'date', 'title'];
     public const FIELDS_SORTABLE = ['filename', 'origin', 'uploaded', 'department', 'type', 'committee', 'date'];
     public const ORIGINS         = ['drupal', 'onboard', 'data'];
+    public const DB_DATETIME     = 'Y-m-d H:i:s';
 
     public function __construct() { parent::__construct('files'); }
 

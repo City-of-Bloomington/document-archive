@@ -36,7 +36,7 @@
             <legend class="usa-legend usa-legend--large">Upload</legend>
 
             {{ forms.field_file('file', 'file', 'File', null,
-                                accept, maxSize, maxBytes, true, {},
+                                accept, maxSize, maxBytes, false, {},
                                 accept ~ ' - ' ~ maxSize) }}
         </fieldset>
 

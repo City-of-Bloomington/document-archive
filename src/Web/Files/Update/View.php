@@ -4,9 +4,9 @@
  * @license https://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE
  */
 declare (strict_types=1);
-namespace Web\Files\Add;
+namespace Web\Files\Update;
 
-use Application\Files\Add\Request;
+use Application\Files\Update\Request;
 use Application\Files\FilesRepository;
 
 class View extends \Web\View
@@ -35,7 +35,7 @@ class View extends \Web\View
 
     public function render(): string
     {
-        return $this->twig->render('html/files/add.twig', $this->vars);
+        return $this->twig->render('html/files/update.twig', $this->vars);
     }
 
     private static function origins(): array
