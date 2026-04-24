@@ -23,6 +23,7 @@
     {% if file.committee  %}<tr><th>Committee</th> <td>{{ file.committee  }}</td></tr>{% endif %}
     {% if file.type       %}<tr><th>Type</th>      <td>{{ file.type       }}</td></tr>{% endif %}
     {% if file.date       %}<tr><th>Date</th>      <td>{{ file.date|date(DATE_FORMAT) }}</td></tr>{% endif %}
+    {% if file.origin_url %}<tr><th>Original URL</th><td>{{ file.origin_url }}</td></tr>{% endif %}
     </table>
 
     <p>This file does not meet contemporary accessibility standards.</p>

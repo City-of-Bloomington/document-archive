@@ -59,7 +59,8 @@ class Import
             'username',
             'department',
             'origin',
-            'origin_id'
+            'origin_id',
+            'origin_url'
         ];
         $col    = implode(',', $fields);
         $par    = implode(',', array_map(fn($f): string => ":$f", $fields));
@@ -89,6 +90,7 @@ class Import
             'origin'           => 'drupal',
             'internalFilename' => $internal,
             'md5'              => $md5,
+            'origin_url'       => DRUPAL_SITE.'/sites/default/files'.$file['path'],
             'origin_id'        => $file['fid'       ],
             'filename'         => $file['filename'  ],
             'mime_type'        => $file['filemime'  ],

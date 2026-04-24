@@ -51,6 +51,7 @@ create table files (
 	department       varchar(32),
 	origin           varchar(32)  not null,
 	origin_id        int unsigned,
+	origin_url       varchar(256) not null,
 	committee        varchar(128),
 	type             varchar(64),
 	date             datetime,
