@@ -12,19 +12,23 @@ include './Drupal.php';
 $importer = new Import($DATABASES['default']);
 $drupal   = new Drupal($DATABASES['drupal' ]);
 
-$sql     = "select distinct f.fid,
-                   f.filename,
-                   f.filemime,
-                   replace(f.uri, 'public:/', '') as path,
-                   from_unixtime(f.created)       as created,
-                   du.name                        as username,
-                   wu.department
-            from      file_managed         f
-                 join users_field_data    du on  f.uid=du.uid
-                 join webscan.users       wu on du.name=wu.username
-            left join webscan.grackle_results g on replace(f.uri, 'public:/', '')=replace(g.url, 'https://bloomington.in.gov/sites/default/files', '')
-            where f.filemime like 'application/pdf'
-              and (g.score is null or g.score<90)";
+$sql = <<<END
+select distinct f.fid,
+    f.filename,
+    f.filemime,
+    replace(f.uri, 'public:/', '') as path,
+    from_unixtime(f.created)       as created,
+    du.name                        as username,
+    wd.name                        as department
+from      file_managed         f
+    join users_field_data    du on  f.uid=du.uid
+    join webscan.users       wu on du.name=wu.username
+    join webscan.departments wd on wd.id=wu.department_id
+left join webscan.grackle_results g on replace(f.uri, 'public:/', '')=replace(g.url, 'https://bloomington.in.gov/sites/default/files', '')
+where f.filemime like 'application/pdf'
+and (g.score is null or g.score<90);
+END;
+
 $query   = $drupal->pdo->query($sql);
 $files   = $query->fetchAll(\PDO::FETCH_ASSOC);
 foreach ($files as $f) {
