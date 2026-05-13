@@ -18,6 +18,7 @@
     {% endif %}
 
     <table>
+    <tr><th>ID</th><td>{{ file.id }}</td></tr>
     {% if file.origin     %}<tr><th>Origin</th>    <td>{{ _(file.origin)  }}</td></tr>{% endif %}
     {% if file.department %}<tr><th>Department</th><td>{{ file.department }}</td></tr>{% endif %}
     {% if file.committee  %}<tr><th>Committee</th> <td>{{ file.committee  }}</td></tr>{% endif %}
